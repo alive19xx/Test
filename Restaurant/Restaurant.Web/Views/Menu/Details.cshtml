@@ -1,0 +1,17 @@
+﻿@model Restaurant.Web.ViewModels.MenuItemViewModel
+@{
+    ViewBag.Title = "Menu item info";
+}
+
+<h4>Menu item info</h4>
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Price:</strong> @Model.Price CUR</p>
+
+<div>
+    @Html.ActionLink("Edit", "Edit", "Menu",new {id=Model.Id}, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Delete", "Delete", "Menu", new { id = Model.Id }, new { @class = "btn btn-danger" })
+</div>
+
+
+
+

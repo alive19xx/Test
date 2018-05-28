@@ -1,0 +1,12 @@
+﻿@model Restaurant.Web.ViewModels.MenuItemViewModel
+@{
+    ViewBag.Title = "Edit menu item";
+}
+
+<h4>Edit menu item</h4>
+@using (Html.BeginForm("Edit", "Menu"))
+{
+    @Html.Partial("_MenuItemForm", Model)
+    @Html.ActionLink("Cancel", "Details", new {id=Model.Id}, new { @class = "btn btn-default" })
+}
+

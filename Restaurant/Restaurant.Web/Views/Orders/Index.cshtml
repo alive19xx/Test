@@ -1,0 +1,37 @@
+﻿@model IEnumerable<OrderViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Orders
+    </div>
+    <table class="table table-striped">
+        <tr><th>Time created</th><th>Table</th><th>Status</th></tr>
+        @if (!Model.Any())
+        {
+            <tr><td colspan="3" class="text-center">No orders to display</td></tr>
+        }
+        else
+        {
+            foreach (var order in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(order.DateTimeCreated.ToString(), "Details", "Orders", new { id = order.Id }, null)
+                    </td>
+                    <td>
+                        @order.TableNumber
+                    </td>
+                    <td>
+                        @order.OrderStatus.ToString()
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+@Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary" })

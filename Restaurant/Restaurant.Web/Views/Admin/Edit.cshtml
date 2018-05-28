@@ -1,0 +1,40 @@
+﻿@using Restaurant.Domain.Enums
+@model Restaurant.Web.ViewModels.UserFormViewModel
+@{ ViewBag.Title = "Edit"; }
+
+<h2>Edit User</h2>
+<div class="form-group">
+    <label>Id</label>
+    <p class="form-control-static">@Model.Id</p>
+</div>
+@Html.ValidationSummary(false)
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-group">
+        @Html.LabelFor(m => m.Login, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.Login, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SecondName, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.SecondName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MiddleName, new { @class = "control-label" })
+        @Html.TextBoxFor(x => x.MiddleName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, "New Password  (optional)",new { @class = "control-label" })
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Position, new {@class = "control-label"})
+        @Html.EnumDropDownListFor(m => m.Position, new {@class = "form-control"})
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+}
