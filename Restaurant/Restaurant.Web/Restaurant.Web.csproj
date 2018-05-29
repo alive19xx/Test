@@ -245,6 +245,10 @@
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\OrderFormViewModel.cs" />
+    <Compile Include="ViewModels\OrderForm\OrderFormItemViewModel.cs" />
+    <Compile Include="ViewModels\OrderForm\OrderFormViewModel.cs" />
+    <Compile Include="ViewModels\OrderItemViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -312,6 +316,9 @@
     <Content Include="Views\Menu\_MenuItemForm.cshtml" />
     <Content Include="Views\Menu\Details.cshtml" />
     <Content Include="Views\Orders\Index.cshtml" />
+    <Content Include="Views\Orders\Create.cshtml" />
+    <Content Include="Views\Orders\Details.cshtml" />
+    <Content Include="Views\Orders\OrderItemTableTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

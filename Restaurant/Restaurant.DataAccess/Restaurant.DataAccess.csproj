@@ -61,6 +61,7 @@
     <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="ApplicationUserStore.cs" />
     <Compile Include="Configurations\MenuItemsConfiguration.cs" />
+    <Compile Include="Configurations\OrderItemConfguration.cs" />
     <Compile Include="Configurations\OrdersConfiguration.cs" />
     <Compile Include="GenericRepository.cs" />
     <Compile Include="Migrations\201805240558318_InitialCreate.cs" />
@@ -74,6 +75,22 @@
     <Compile Include="Migrations\201805240936434_AddUserPosition.cs" />
     <Compile Include="Migrations\201805240936434_AddUserPosition.Designer.cs">
       <DependentUpon>201805240936434_AddUserPosition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805280801316_DropOrderMenuItems.cs" />
+    <Compile Include="Migrations\201805280801316_DropOrderMenuItems.Designer.cs">
+      <DependentUpon>201805280801316_DropOrderMenuItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805280802382_AddOrderItems.cs" />
+    <Compile Include="Migrations\201805280802382_AddOrderItems.Designer.cs">
+      <DependentUpon>201805280802382_AddOrderItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805280803399_AddOrderItemProperties.cs" />
+    <Compile Include="Migrations\201805280803399_AddOrderItemProperties.Designer.cs">
+      <DependentUpon>201805280803399_AddOrderItemProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805281016100_OrderItemTableChanges.cs" />
+    <Compile Include="Migrations\201805281016100_OrderItemTableChanges.Designer.cs">
+      <DependentUpon>201805281016100_OrderItemTableChanges.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +121,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805240936434_AddUserPosition.resx">
       <DependentUpon>201805240936434_AddUserPosition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805280801316_DropOrderMenuItems.resx">
+      <DependentUpon>201805280801316_DropOrderMenuItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805280802382_AddOrderItems.resx">
+      <DependentUpon>201805280802382_AddOrderItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805280803399_AddOrderItemProperties.resx">
+      <DependentUpon>201805280803399_AddOrderItemProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805281016100_OrderItemTableChanges.resx">
+      <DependentUpon>201805281016100_OrderItemTableChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

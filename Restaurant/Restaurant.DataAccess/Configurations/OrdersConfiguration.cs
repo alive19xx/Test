@@ -13,7 +13,7 @@ namespace Restaurant.DataAccess.Configurations
         public OrdersConfiguration()
         {
             HasKey(o => o.Id);
-            HasMany(o => o.OrderItems);
+            HasMany(o => o.OrderItems).WithRequired().HasForeignKey(i => i.OrderId);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Restaurant.DataAccess
 
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<MenuItem> MenuItems { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
 
 
         public static ApplicationDbContext Create()
@@ -26,6 +27,7 @@ namespace Restaurant.DataAccess
 
             modelBuilder.Configurations.Add(new OrdersConfiguration());
             modelBuilder.Configurations.Add(new MenuItemsConfiguration());
+            modelBuilder.Configurations.Add(new OrderItemConfguration());
 
             base.OnModelCreating(modelBuilder);
         }

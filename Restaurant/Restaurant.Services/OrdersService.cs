@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Restaurant.Domain.Entities;
@@ -11,49 +12,71 @@ namespace Restaurant.Services
 {
     public class OrdersService : IOrdersService
     {
+        #region Service setup
         private readonly IUnitOfWork _unitOfWork;
 
         public OrdersService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+        #endregion
 
-        public void AddOrderItems(int id, IEnumerable<int> itemsIds)
+        #region Public Methods
+
+        public Order Get(int id)
         {
-            var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
-            var newItems = _unitOfWork.MenuItems.GetBy(o => itemsIds.Contains(o.Id)).ToList();
-
-            foreach (var item in newItems)
-            {
-                orderInDb.OrderItems.Add(item);
-            }
-            _unitOfWork.Complete();
+            var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(
+                o => o.Id == id,
+                o => o.OrderItems.Select(i => i.MenuItem));
+            return orderInDb;
         }
 
-        public void OrderAccepted(Order order)
+        public void AcceptOrder(Order order)
         {
+            order.DateTimeCreated = DateTime.Now;
+            order.OrderStatus = OrderStatus.Accepted;
+            order.Id = 0;
+
             _unitOfWork.Orders.Add(order);
             _unitOfWork.Complete();
         }
 
-        public void OrderReady(int id)
+        public void AcceptOrder(Order order, IEnumerable<OrderItem> orderItems)
+        {
+
+        }
+
+        public void ReadyOrder(int id)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
             orderInDb.OrderStatus = OrderStatus.Ready;
             _unitOfWork.Complete();
         }
 
-        public void OrderServed(int id)
+        public void ServeOrder(int id)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
             orderInDb.OrderStatus = OrderStatus.Served;
             _unitOfWork.Complete();
         }
 
-        public void OrderComplete(int id)
+        public void CompleteOrder(int id)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
             orderInDb.OrderStatus = OrderStatus.Closed;
+        }
+
+        public void UpdateOrder(Order order)
+        {
+
+        }
+
+        public void CancelOrder(int id)
+        {
+            var orderInDb =
+                _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
+            _unitOfWork.Orders.Remove(orderInDb);
+            _unitOfWork.Complete();
         }
 
         public IEnumerable<Order> Get()
@@ -61,22 +84,36 @@ namespace Restaurant.Services
             var ordersInDb = _unitOfWork.Orders.Get();
             return ordersInDb;
         }
-        public IEnumerable<Order> Get(OrderStatus status)
-        {
-            var ordersInDb = GetBy(o => o.OrderStatus == status);
-            return ordersInDb;
-        }
 
-        public Order Get(int id)
-        {
-            var ordersInDb = _unitOfWork.Orders.GetSingleOrDefault(o=>o.Id == id);
-            return ordersInDb;
-        }
-        public IEnumerable<Order> GetBy(Func<Order, bool> predicate)
+        public IEnumerable<Order> GetBy(Expression<Func<Order, bool>> predicate)
         {
             var ordersInDb = _unitOfWork.Orders.GetBy(predicate);
             return ordersInDb;
         }
 
+        public void AddOrderItems(int orderId, IEnumerable<OrderItem> newItems)
+        {
+            var orderItemsInDb = _unitOfWork.OrderItems.GetBy(i => i.OrderId == orderId, i => i.MenuItem) ?? new List<OrderItem>();
+            foreach (var newItem in newItems)
+            {
+                var orderItemInDb = orderItemsInDb.SingleOrDefault(i => i.MenuItemId == newItem.MenuItem.Id);
+                if (orderItemInDb != null)
+                {
+                    orderItemInDb.NumberOfItems = newItem.NumberOfItems;
+                }
+                else
+                {
+                    var newOrderItem = new OrderItem()
+                    {
+                        MenuItemId = newItem.MenuItem.Id,
+                        OrderId = orderId,
+                        NumberOfItems = newItem.NumberOfItems
+                    };
+                    _unitOfWork.OrderItems.Add(newOrderItem);
+                }
+            }
+            _unitOfWork.Complete();
+        }
+        #endregion
     }
 }

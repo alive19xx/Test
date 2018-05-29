@@ -11,7 +11,7 @@ namespace Restaurant.Domain.Entities
         public int Id { get; set; }
         public DateTime DateTimeCreated { get; set; }
         public int TableNumber { get; set; }
-        public IList<OrderItem> OrderItems { get; set; }
+        public virtual IList<OrderItem> OrderItems { get; set; }
         public OrderStatus OrderStatus { get; set; }
     }
 }

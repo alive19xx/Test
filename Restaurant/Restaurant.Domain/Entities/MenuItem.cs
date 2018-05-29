@@ -1,4 +1,6 @@
-﻿namespace Restaurant.Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace Restaurant.Domain.Entities
 {
     public class MenuItem
     {

@@ -12,9 +12,8 @@ namespace Restaurant.Web
     {
         public int? Id { get; set; }
         public int TableNumber { get; set; }
-        public IList<MenuItemViewModel> OrderItems { get; set; }
+        public IList<OrderItemViewModel> OrderItems { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public DateTime DateTimeCreated { get; set; }
-        public decimal TotalPrice { get; set; }
     }
 }

@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Restaurant.Web.Dtos
 {
-    public class OrderItemsDto
+    public class OrderItemDto
     {
-        public int OrderId { get; set; }
-        public IEnumerable<int> NewItemsIds { get; set; }
+        public int MenuItemId { get; set; }
+        public int NumberOfItems { get; set; }
     }
 }

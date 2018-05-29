@@ -18,11 +18,13 @@ namespace Restaurant.DataAccess
             Orders = new GenericRepository<Order>(_context);
             MenuItems = new GenericRepository<MenuItem>(_context);
             Users = new GenericRepository<User>(_context);
+            OrderItems = new GenericRepository<OrderItem>(_context);
         }
         
         public IRepository<Order> Orders { get; }
         public IRepository<MenuItem> MenuItems { get; }
         public IRepository<User> Users { get; }
+        public IRepository<OrderItem> OrderItems { get; }
         public void Complete()
         {
             _context.SaveChanges();

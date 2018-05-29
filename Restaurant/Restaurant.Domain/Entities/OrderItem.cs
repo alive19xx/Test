@@ -8,22 +8,27 @@ namespace Restaurant.Domain.Entities
 {
     public class OrderItem
     {
+
+        public int OrderId { get; set; }
+        public int MenuItemId { get; set; }
+        public virtual MenuItem MenuItem { get; set; }
+        
         private int _numberOfItems;
-
-        public MenuItem MenuItem { get; set; }
-
         public int NumberOfItems
         {
             get
             {
-                if (_numberOfItems<0)
+                if (_numberOfItems < 0)
                     return 0;
                 return _numberOfItems;
             }
             set
             {
                 if (_numberOfItems < 0)
+                {
                     _numberOfItems = 0;
+                    return;
+                }
                 _numberOfItems = value;
             }
         }

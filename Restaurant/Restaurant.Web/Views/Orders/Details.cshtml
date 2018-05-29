@@ -1,0 +1,32 @@
+﻿@model OrderViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Order Details</h2>
+
+Status: @Model.OrderStatus.ToString()
+Date: @Model.DateTimeCreated.ToString()
+Table: @Model.TableNumber.ToString()
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Order items
+    </div>
+    <table class="table table-striped">
+        <tr><th>Dish</th><th>Number of portions</th></tr>
+        @if (!Model.OrderItems.Any())
+        {
+            <tr><td colspan="2" class="text-center">No order items to display</td></tr>
+        }
+        else
+        {
+            foreach (var item in Model.OrderItems)
+            {
+                <tr><td>@item.MenuItem.Name.ToString()</td><td>@item.NumberOfItems.ToString()</td></tr>
+            }
+        }
+
+    </table>
+</div>
+@Html.ActionLink("Cancel Order", "Cancel", new {id = Model.Id} , new { @class = "btn btn-primary" })
