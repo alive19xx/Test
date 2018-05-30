@@ -29,4 +29,9 @@ Table: @Model.TableNumber.ToString()
 
     </table>
 </div>
-@Html.ActionLink("Cancel Order", "Cancel", new {id = Model.Id} , new { @class = "btn btn-primary" })
+@Html.ActionLink("Ready", "Ready", new { id = Model.Id }, new { @class = "btn btn-success" })
+@Html.ActionLink("Serve", "Serve", new { id = Model.Id }, new { @class = "btn btn-success" })
+@Html.ActionLink("Close", "Close", new { id = Model.Id }, new { @class = "btn btn-success" })
+@Html.ActionLink("Edit order", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+@Html.ActionLink("Cancel Order", "Cancel", new { id = Model.Id }, new { @class = "btn btn-danger" })
+

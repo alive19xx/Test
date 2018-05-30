@@ -1,0 +1,92 @@
+﻿@using System.Collections
+@using Restaurant.Web.ViewModels
+@model Restaurant.Web.ViewModels.OrderForm.OrderFormViewModel
+
+@Html.ValidationSummary(true)
+<div class="form-group">
+    @Html.LabelFor(m => m.TableNumber, new { @class = "control-label" })
+    @Html.TextBoxFor(x => x.TableNumber, new { @class = "form-control" })
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <button id="add-order-item-button" type="button" class="btn btn-success">Add Item</button>
+        @{
+            var selectMenuItems = new List<SelectListItem>();
+            foreach (var item in ViewBag.Menu)
+            {
+                selectMenuItems.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+            }
+        }
+        @Html.DropDownList("Menu items", new SelectList(selectMenuItems, "Value", "Text"), new { id = "menu-dropdown", @class = "form-control", style = "display:inline-block" })
+
+    </div>
+
+    <table id="order-items-table" class="table table-striped">
+        <thead><tr><th>Menu Item</th> <th>Number of portions</th></tr></thead>
+        <tbody>
+            @if (Model?.OrderItems != null && Model.OrderItems.Any())
+            {
+                var count = 0;
+                foreach (var item in Model.OrderItems)
+                {
+
+                    <tr class="order-item">
+                        <td>
+                            <div>
+                                <span>
+                                    @((ViewBag.Menu as IEnumerable<MenuItemViewModel>)
+                                                  .SingleOrDefault(m => m.Id == item.MenuItemId)
+                                                  .Name)
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="hidden" value="@item.MenuItemId" name="OrderItems[@count].MenuItemId" />
+                            <input type="number" value="@item.NumberOfItems" min="0" name="OrderItems[@count].NumberOfItems" class="form-control" />
+                        </td>
+                    </tr>
+                    { count++; }
+
+                }
+            }
+        </tbody>
+    </table>
+</div>
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.Id)
+
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#add-order-item-button").click(function () {
+                addNewItem($("#order-items-table tbody"),
+                    $("#menu-dropdown").val(),
+                    $("#menu-dropdown :selected").text(),
+                    $("#order-items-table tbody tr.order-item").length);
+            });
+        });
+
+
+        function addNewItem(tableBody, menuItemId, menuItemName, itemIndex) {
+            console.log(menuItemId);
+            var template = [
+                '<tr class="order-item">',
+                '<td>',
+                '<div>',
+                `<span>${menuItemName}</span>`,
+                '</div>',
+                '</td >',
+                '<td>',
+                `<input type="hidden" value="${menuItemId}" name="OrderItems[${itemIndex}].MenuItemId" />`,
+                `<input type="number" value="1" min="0" name="OrderItems[${itemIndex}].NumberOfItems" class="form-control" />`,
+                '</td>',
+                '</tr >'
+            ].join("\n");
+            $(tableBody).append(template);
+        }
+    </script>
+}
+

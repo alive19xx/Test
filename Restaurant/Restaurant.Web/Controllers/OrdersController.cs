@@ -20,7 +20,7 @@ namespace Restaurant.Web.Controllers
         #region Controller Setup
         private readonly IOrdersService _ordersService;
         private readonly IMenuItemsService _menuItemsService;
-        public OrdersController(IOrdersService orderService,IMenuItemsService menuItemsService)
+        public OrdersController(IOrdersService orderService, IMenuItemsService menuItemsService)
         {
             _ordersService = orderService;
             _menuItemsService = menuItemsService;
@@ -56,6 +56,22 @@ namespace Restaurant.Web.Controllers
             return View(orderViewModel);
         }
 
+        public ActionResult Edit(int id)
+        {
+            ViewBag.Menu = Mapper
+                .Map<IEnumerable<MenuItem>, IEnumerable<MenuItemViewModel>>(_menuItemsService.Get());
+            var orderFormViewModel = Mapper.Map<Order, OrderFormViewModel>(_ordersService.Get(id));
+            return View(orderFormViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(OrderFormViewModel model)
+        {
+            var order = Mapper.Map<OrderFormViewModel, Order>(model);
+            _ordersService.UpdateOrder(order);
+            return RedirectToAction("Details",new{id=order.Id});
+        }
+
         public ActionResult Ready(int id)
         {
             _ordersService.ReadyOrder(id);
@@ -68,15 +84,10 @@ namespace Restaurant.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Complete(int id)
+        public ActionResult Close(int id)
         {
             _ordersService.CompleteOrder(id);
             return RedirectToAction("Index");
-        }
-
-        public ActionResult Edit(int id)
-        {
-            return HttpNotFound();
         }
 
         public ActionResult Cancel(int id)

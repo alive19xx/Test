@@ -8,6 +8,8 @@ namespace Restaurant.Web.ViewModels.OrderForm
 {
     public class OrderFormViewModel
     {
+        public int? Id { get; set; }
+
         [Required]
         public int TableNumber { get; set; }
         public IList<OrderFormItemViewModel> OrderItems { get; set; }
