@@ -53,6 +53,7 @@
     <Compile Include="Entities\MenuItem.cs" />
     <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\OrderItem.cs" />
+    <Compile Include="Entities\RoleAccess.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\UserPosition.cs" />

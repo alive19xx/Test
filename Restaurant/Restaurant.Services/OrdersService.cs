@@ -107,6 +107,14 @@ namespace Restaurant.Services
             return ordersInDb;
         }
 
+        public IEnumerable<Order> GetByStatus(IEnumerable<OrderStatus> statusFilter)
+        {
+            if (statusFilter == null || !statusFilter.Any())
+                return null;
+
+            var ordersInDb = _unitOfWork.Orders.GetBy(o=> statusFilter.Any(f=>f==o.OrderStatus));
+            return ordersInDb;
+        }
 
         #endregion
 

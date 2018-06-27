@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -15,6 +17,7 @@ using OrderFormViewModel = Restaurant.Web.ViewModels.OrderForm.OrderFormViewMode
 
 namespace Restaurant.Web.Controllers
 {
+    
     public class OrdersController : Controller
     {
         #region Controller Setup
@@ -29,9 +32,13 @@ namespace Restaurant.Web.Controllers
 
         public ActionResult Index()
         {
-            var orders = _ordersService.Get();
-            var ordersViewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(orders);
-            return View(ordersViewModel);
+            //var viewModel =Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(_ordersService
+            //        .GetByStatus(orderStatusFilter));
+
+            var viewModel = Mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(_ordersService
+                .Get());
+
+            return View(viewModel);
         }
 
         public ActionResult Create()
@@ -69,7 +76,7 @@ namespace Restaurant.Web.Controllers
         {
             var order = Mapper.Map<OrderFormViewModel, Order>(model);
             _ordersService.UpdateOrder(order);
-            return RedirectToAction("Details",new{id=order.Id});
+            return RedirectToAction("Details", new { id = order.Id });
         }
 
         public ActionResult Ready(int id)
@@ -96,9 +103,46 @@ namespace Restaurant.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult ChangeOrderItems(int id, IEnumerable<OrderItemDto> dto)
-        {
-            return View();
-        }
+        
+
+        //#region Private helpers
+        //private IEnumerable<OrderStatus> GetStatusFilter()
+        //{
+        //    IList<OrderStatus> statusFilter = new List<OrderStatus>();
+        //    var user = User as ClaimsPrincipal;
+        //    if (user?.Claims == null)
+        //        return statusFilter;
+
+        //    foreach (var claim in user.Claims)
+        //    {
+        //        if (claim.Type != ClaimTypes.Role)
+        //            continue;
+        //        var newFilterItems = new List<OrderStatus>();
+        //        switch (claim.Value)
+        //        {
+        //            case "Admin":
+        //                newFilterItems.Add(OrderStatus.Accepted);
+        //                newFilterItems.Add(OrderStatus.Closed);
+        //                newFilterItems.Add(OrderStatus.Ready);
+        //                newFilterItems.Add(OrderStatus.Served);
+        //                break;
+        //            case "Waiter":
+        //                newFilterItems.Add(OrderStatus.Accepted);
+        //                newFilterItems.Add(OrderStatus.Ready);
+        //                newFilterItems.Add(OrderStatus.Served);
+        //                break;
+        //            case "Cook":
+        //                newFilterItems.Add(OrderStatus.Accepted);
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //        statusFilter = statusFilter.Union(newFilterItems) as IList<OrderStatus>;
+        //    }
+
+        //    return statusFilter;
+        //}
+
+        //#endregion
     }
 }

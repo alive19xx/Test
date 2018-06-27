@@ -20,5 +20,6 @@ namespace Restaurant.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
         }
+        
     }
 }

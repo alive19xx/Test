@@ -13,13 +13,12 @@ namespace Restaurant.Domain.Entities
         public string SecondName { get; set; }
         public string MiddleName { get; set; }
         public UserPosition Position { get; set; }
-
+        
         public string FullName
         {
             get
             {
                 var fullName = new StringBuilder();
-
                 fullName.Append(FirstName);
                 if (MiddleName != null)
                     fullName.Append(" ").Append(MiddleName);
@@ -31,6 +30,7 @@ namespace Restaurant.Domain.Entities
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
         {
+            
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here

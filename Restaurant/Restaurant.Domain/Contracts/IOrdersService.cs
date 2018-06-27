@@ -22,6 +22,8 @@ namespace Restaurant.Domain.Contracts
 
         IEnumerable<Order> Get();
         Order Get(int id);
+        IEnumerable<Order> GetByStatus(IEnumerable<OrderStatus> statusFilter);
+        
         IEnumerable<Order> GetBy(Expression<Func<Order,bool>> predicate);
     }
 }
