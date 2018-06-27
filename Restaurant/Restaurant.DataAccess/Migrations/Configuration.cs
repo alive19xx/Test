@@ -5,7 +5,7 @@ namespace Restaurant.DataAccess.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Restaurant.DataAccess.ApplicationDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<Restaurant.DataAccess.ApplicationDbContext>
     {
         public Configuration()
         {

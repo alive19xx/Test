@@ -19,7 +19,7 @@ namespace Restaurant.Services.Identity
             IOwinContext context)
         {
 
-            var store = new ApplicationUserStore<User>(context.Get<ApplicationDbContext>());
+            var store = new ApplicationUserStore(context.Get<ApplicationDbContext>());
             var manager = new ApplicationUserManager(store);
 
             manager.UserValidator = new UserValidator<User>(manager)

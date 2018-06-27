@@ -10,7 +10,6 @@ using Restaurant.Domain.Contracts;
 using Restaurant.Domain.Entities;
 using Restaurant.Services;
 using Restaurant.Services.Identity;
-using Restaurant.Web.Models;
 
 namespace Restaurant.Web
 {

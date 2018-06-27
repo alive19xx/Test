@@ -44,55 +44,85 @@ namespace Restaurant.Services
             _unitOfWork.Complete();
         }
 
-        public void AcceptOrder(Order order, IEnumerable<OrderItem> orderItems)
-        {
-
-        }
-
-        public void ReadyOrder(int id)
+       public ChangeOrderStatusResult ReadyOrder(int id)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
-            if (orderInDb == null || orderInDb.OrderStatus != OrderStatus.Accepted)
-                return;
+
+            if (orderInDb == null)
+                return ChangeOrderStatusResult.NotFound;
+
+            if (orderInDb.OrderStatus != OrderStatus.Accepted)
+                return ChangeOrderStatusResult.InvalidStatus;
 
             orderInDb.OrderStatus = OrderStatus.Ready;
             _unitOfWork.Complete();
+            return ChangeOrderStatusResult.Success;
         }
 
-        public void ServeOrder(int id)
+        public ChangeOrderStatusResult ServeOrder(int id)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
-            if (orderInDb == null || orderInDb.OrderStatus != OrderStatus.Ready)
-                return;
+
+            if (orderInDb == null)
+                return ChangeOrderStatusResult.NotFound;
+
+            if (orderInDb.OrderStatus != OrderStatus.Ready)
+                return ChangeOrderStatusResult.InvalidStatus;
 
             orderInDb.OrderStatus = OrderStatus.Served;
             _unitOfWork.Complete();
+
+            return ChangeOrderStatusResult.Success;
         }
 
-        public void CompleteOrder(int id)
+        public ChangeOrderStatusResult CompleteOrder(int id)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
-            if (orderInDb == null || orderInDb.OrderStatus != OrderStatus.Served)
-                return;
+
+            if (orderInDb == null)
+                return ChangeOrderStatusResult.NotFound;
+
+            if (orderInDb.OrderStatus != OrderStatus.Served)
+                return ChangeOrderStatusResult.InvalidStatus;
 
             orderInDb.OrderStatus = OrderStatus.Closed;
             _unitOfWork.Complete();
+
+            return ChangeOrderStatusResult.Success;
         }
 
-        public void UpdateOrder(Order order)
+        public ChangeOrderStatusResult UpdateOrder(Order order)
         {
             var orderInDb = _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == order.Id);
+
+            if (orderInDb == null)
+                return ChangeOrderStatusResult.NotFound;
+
+            if (orderInDb.OrderStatus == OrderStatus.Closed)
+                return ChangeOrderStatusResult.InvalidStatus;
+
+            orderInDb.OrderStatus = OrderStatus.Accepted;
             orderInDb.TableNumber = order.TableNumber;
             updateOrderItems(order.Id, order.OrderItems);
             _unitOfWork.Complete();
+
+            return ChangeOrderStatusResult.Success;
         }
         
-        public void CancelOrder(int id)
+        public ChangeOrderStatusResult CancelOrder(int id)
         {
             var orderInDb =
                 _unitOfWork.Orders.GetSingleOrDefault(o => o.Id == id);
+
+            if (orderInDb == null)
+                return ChangeOrderStatusResult.NotFound;
+
+            if (orderInDb.OrderStatus == OrderStatus.Closed)
+                return ChangeOrderStatusResult.InvalidStatus;
+
             _unitOfWork.Orders.Remove(orderInDb);
             _unitOfWork.Complete();
+            return ChangeOrderStatusResult.Success;
         }
 
         public IEnumerable<Order> Get()

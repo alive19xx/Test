@@ -10,7 +10,7 @@ using Restaurant.Domain.Entities;
 
 namespace Restaurant.DataAccess
 {
-    public class ApplicationUserStore<T>:UserStore<T> where T : IdentityUser
+    public class ApplicationUserStore:UserStore<User>
     {
         public ApplicationUserStore() : this(new ApplicationDbContext())
         {

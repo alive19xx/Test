@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using Restaurant.Domain.Contracts;
 using Restaurant.Domain.Entities;
 using Restaurant.Services;
+using Restaurant.Web.Attributes;
 using Restaurant.Web.ViewModels;
 
 namespace Restaurant.Web.Controllers
 {
+    [Authorize]
+    [ClaimsAuthorize(ClaimTypes.Role, new []{"Admin" })]
     public class MenuController : Controller
     {
         #region Controller setup
@@ -40,10 +44,12 @@ namespace Restaurant.Web.Controllers
             return View(menuItemViewModel);
         }
 
+        
         public ActionResult Create()
         {
             return View();
         }
+
 
         [HttpPost]
         public ActionResult Create(MenuItemViewModel model)
@@ -54,7 +60,7 @@ namespace Restaurant.Web.Controllers
 
             return Save(menuItem);
         }
-        
+
         public ActionResult Edit(int id)
         {
             var menuItem = _menuService.Get(id);

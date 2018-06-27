@@ -10,14 +10,14 @@ using Restaurant.Domain.Contracts;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Enums;
 using Restaurant.Services;
-using Restaurant.Web.Dtos;
+using Restaurant.Web.Attributes;
 using Restaurant.Web.ViewModels;
 using Restaurant.Web.ViewModels.OrderForm;
 using OrderFormViewModel = Restaurant.Web.ViewModels.OrderForm.OrderFormViewModel;
 
 namespace Restaurant.Web.Controllers
 {
-    
+    [Authorize]
     public class OrdersController : Controller
     {
         #region Controller Setup
@@ -41,6 +41,7 @@ namespace Restaurant.Web.Controllers
             return View(viewModel);
         }
 
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Create()
         {
             var menuItemsViewModel = Mapper
@@ -50,6 +51,7 @@ namespace Restaurant.Web.Controllers
         }
 
         [HttpPost]
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Create(OrderFormViewModel model)
         {
             var newOrder = Mapper.Map<OrderFormViewModel, Order>(model);
@@ -63,86 +65,94 @@ namespace Restaurant.Web.Controllers
             return View(orderViewModel);
         }
 
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Edit(int id)
         {
             ViewBag.Menu = Mapper
                 .Map<IEnumerable<MenuItem>, IEnumerable<MenuItemViewModel>>(_menuItemsService.Get());
+
+            var order = _ordersService.Get(id);
+            if (order == null)
+                return HttpNotFound();
+
+            if (order.OrderStatus == OrderStatus.Closed)
+                return View("InvalidStatus");
+
             var orderFormViewModel = Mapper.Map<Order, OrderFormViewModel>(_ordersService.Get(id));
             return View(orderFormViewModel);
         }
 
         [HttpPost]
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Edit(OrderFormViewModel model)
         {
             var order = Mapper.Map<OrderFormViewModel, Order>(model);
-            _ordersService.UpdateOrder(order);
+            var result = _ordersService.UpdateOrder(order);
+
+            if (result == ChangeOrderStatusResult.InvalidStatus)
+                return View("InvalidStatus");
+
+            if (result == ChangeOrderStatusResult.NotFound)
+                return HttpNotFound();
+
             return RedirectToAction("Details", new { id = order.Id });
         }
 
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Cook" })]
         public ActionResult Ready(int id)
         {
-            _ordersService.ReadyOrder(id);
+            var result = _ordersService.ReadyOrder(id);
+
+            if (result == ChangeOrderStatusResult.InvalidStatus)
+                return View("InvalidStatus");
+
+            if (result == ChangeOrderStatusResult.NotFound)
+                return HttpNotFound();
+
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Serve(int id)
         {
-            _ordersService.ServeOrder(id);
+            var result = _ordersService.ServeOrder(id);
+
+            if (result == ChangeOrderStatusResult.InvalidStatus)
+                return View("InvalidStatus");
+
+            if (result == ChangeOrderStatusResult.NotFound)
+                return HttpNotFound();
+
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Close(int id)
         {
-            _ordersService.CompleteOrder(id);
+            var result = _ordersService.CompleteOrder(id);
+
+            if (result == ChangeOrderStatusResult.InvalidStatus)
+                return View("InvalidStatus");
+
+            if (result == ChangeOrderStatusResult.NotFound)
+                return HttpNotFound();
+
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize(ClaimTypes.Role, new[] { "Admin", "Waiter" })]
         public ActionResult Cancel(int id)
         {
-            _ordersService.CancelOrder(id);
+            var result = _ordersService.CancelOrder(id);
+
+            if (result == ChangeOrderStatusResult.InvalidStatus)
+                return View("InvalidStatus");
+
+            if (result == ChangeOrderStatusResult.NotFound)
+                return HttpNotFound();
+            
             return RedirectToAction("Index");
         }
 
-        
-
-        //#region Private helpers
-        //private IEnumerable<OrderStatus> GetStatusFilter()
-        //{
-        //    IList<OrderStatus> statusFilter = new List<OrderStatus>();
-        //    var user = User as ClaimsPrincipal;
-        //    if (user?.Claims == null)
-        //        return statusFilter;
-
-        //    foreach (var claim in user.Claims)
-        //    {
-        //        if (claim.Type != ClaimTypes.Role)
-        //            continue;
-        //        var newFilterItems = new List<OrderStatus>();
-        //        switch (claim.Value)
-        //        {
-        //            case "Admin":
-        //                newFilterItems.Add(OrderStatus.Accepted);
-        //                newFilterItems.Add(OrderStatus.Closed);
-        //                newFilterItems.Add(OrderStatus.Ready);
-        //                newFilterItems.Add(OrderStatus.Served);
-        //                break;
-        //            case "Waiter":
-        //                newFilterItems.Add(OrderStatus.Accepted);
-        //                newFilterItems.Add(OrderStatus.Ready);
-        //                newFilterItems.Add(OrderStatus.Served);
-        //                break;
-        //            case "Cook":
-        //                newFilterItems.Add(OrderStatus.Accepted);
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //        statusFilter = statusFilter.Union(newFilterItems) as IList<OrderStatus>;
-        //    }
-
-        //    return statusFilter;
-        //}
-
-        //#endregion
     }
 }

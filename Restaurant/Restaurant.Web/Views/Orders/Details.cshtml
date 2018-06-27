@@ -4,10 +4,9 @@
 }
 
 <h2>Order Details</h2>
-
-Status: @Model.OrderStatus.ToString()
-Date: @Model.DateTimeCreated.ToString()
-Table: @Model.TableNumber.ToString()
+<p><strong>Status:</strong> @Model.OrderStatus.ToString()</p>
+<p><strong>Date:</strong> @Model.DateTimeCreated.ToString()</p>
+<p><strong>Table:</strong> @Model.TableNumber.ToString()</p>
 
 <div class="panel panel-primary">
     <div class="panel-heading">

@@ -9,10 +9,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Restaurant.Services.Identity;
-using Restaurant.Web.Models;
+using Restaurant.Web.ViewModels;
 
 namespace Restaurant.Web.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationUserManager UserManager => HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -59,7 +60,7 @@ namespace Restaurant.Web.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index","Orders");
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
@@ -68,7 +69,7 @@ namespace Restaurant.Web.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
         
     }

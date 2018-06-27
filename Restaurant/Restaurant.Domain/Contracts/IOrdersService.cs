@@ -12,13 +12,11 @@ namespace Restaurant.Domain.Contracts
     public interface IOrdersService
     {
         void AcceptOrder(Order order);
-        void AcceptOrder(Order order, IEnumerable<OrderItem> orderItems);
-        void ReadyOrder(int id);
-        void ServeOrder(int id);
-        void CompleteOrder(int id);
-        void CancelOrder(int id);
-
-        void UpdateOrder(Order order);
+        ChangeOrderStatusResult ReadyOrder(int id);
+        ChangeOrderStatusResult ServeOrder(int id);
+        ChangeOrderStatusResult CompleteOrder(int id);
+        ChangeOrderStatusResult CancelOrder(int id);
+        ChangeOrderStatusResult UpdateOrder(Order order);
 
         IEnumerable<Order> Get();
         Order Get(int id);

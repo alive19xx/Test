@@ -12,12 +12,13 @@ using Restaurant.Domain.Entities;
 using Restaurant.Domain.Enums;
 using Restaurant.Services;
 using Restaurant.Services.Identity;
+using Restaurant.Web.Attributes;
 using Restaurant.Web.ViewModels;
 
 namespace Restaurant.Web.Controllers
 {
-    //[Authorize]
-    //[ClaimsAuthorize(ClaimTypes.Role, "Admin")]
+    [Authorize]
+    [ClaimsAuthorize(ClaimTypes.Role, new []{ "Admin" } )]
     public class AdminController : AsyncController
     {
         private ApplicationUserManager UserManager => HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
