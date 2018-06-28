@@ -1,3 +1,7 @@
+using Microsoft.AspNet.Identity;
+using Restaurant.Domain.Entities;
+using Restaurant.Domain.Enums;
+
 namespace Restaurant.DataAccess.Migrations
 {
     using System;
@@ -18,6 +22,19 @@ namespace Restaurant.DataAccess.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            var userStore = new ApplicationUserStore(context);
+            var userManager = new UserManager<User>(userStore);
+            if (!userManager.Users.Any(x => x.UserName == "Admin"))
+            {
+                var admin = new User()
+                {
+                    UserName = "Admin",
+                    FirstName = "Admin",
+                    SecondName = "Restaurant",
+                    Position = UserPosition.Admin
+                };
+                userManager.Create(admin, "RestaurantAdmin");
+            }
         }
     }
 }
